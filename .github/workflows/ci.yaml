@@ -1,0 +1,111 @@
+name: CI
+
+on:
+  pull_request:
+    branches:
+    - main
+  push:
+    branches:
+    - main
+  workflow_dispatch:
+
+jobs:
+  pre-commit:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-python@v4
+    - uses: terraform-linters/setup-tflint@v3
+    - uses: pre-commit/action@v3.0.0
+      with:
+        extra_args: "-a"
+
+  validate:
+    name: Validate
+    needs: [pre-commit]
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    strategy:
+      fail-fast: true
+      matrix:
+        tf-version: ["1.0.11", "1.1.9", "1.2.9", "1.3.6", "latest"]
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v2
+      with:
+        terraform_version: ${{ matrix.tf-version }}
+    - name: Terraform Init
+      run: |
+        terraform init -backend=false -upgrade -reconfigure
+    - name: Terraform FMT
+      run: |
+        terraform fmt -check -recursive
+    - name: Terraform Validate
+      run: |
+        terraform validate
+    - name: Terraform Version / Providers
+      run: |
+        terraform version
+        terraform providers
+    - name: Exmaple Complete Validate
+      run: |
+        cd exmaples/complete
+        terraform init -backend=false -upgrade -reconfigure
+        terraform validate
+    - name: Exmaple Remote Validate
+      run: |
+        cd exmaples/remote
+        terraform init -backend=false -upgrade -reconfigure
+        terraform validate
+
+  tfsec:
+    name: tfsec
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    needs: [validate]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: tfsec
+        uses: aquasecurity/tfsec-action@v1.0.2
+        with:
+          additional_args: "--force-all-dirs --concise-output --code-theme=dark"
+          version: "latest"
+
+  caller-identity-check:
+    if: contains(github.event_name, 'pull_request')
+    name: Return the IAM user
+    needs: [validate, tfsec]
+    permissions:
+      contents: read
+      id-token: write
+    runs-on: ubuntu-latest
+    steps:
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1.7.0
+      with:
+        aws-region: ${{ secrets.AWS_REGION }}
+        role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/github-actions
+    - run: |
+        aws sts get-caller-identity
+
+  auto-approve:
+    if: contains(github.event_name, 'pull_request')
+    runs-on: ubuntu-latest
+    needs: [validate, tfsec, caller-identity-check]
+    steps:
+    - name: Auto Approve PR
+      uses: actions/github-script@v6
+      with:
+       github-token: ${{ github.token }}
+       script: |
+        github.rest.pulls.createReview({
+          owner: context.repo.owner,
+          repo: context.repo.repo,
+          pull_number: context.issue.number,
+          event: "APPROVE"
+        })
