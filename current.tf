@@ -1,5 +1,3 @@
-data "aws_partition" "current" {}
-
 locals {
   projects = flatten([
     for repo in var.projects : [
@@ -11,6 +9,8 @@ locals {
     ]
   ])
 }
+
+data "aws_partition" "current" {}
 
 data "aws_iam_policy_document" "assume_role" {
   statement {
