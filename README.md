@@ -31,11 +31,16 @@ module "terraform_cloud" {
 
 Please see [TERRAFORM.md](./TERRAFORM.md)
 
-## GitHub Actions
+## Terraform Cloud Configure trust variables
 
-Retrieve temporary credentials:
+After you have create a workspace, navigate to the Variables page and add the following variables:
 
-https://github.com/saidsef/terraform-aws-terraform-cloud-oidc/blob/29d6020587d06986388d84b2d10cbe266a1ea484/.github/workflows/ci.yaml#L79-L94
+| Category | Key | Value | Sensitive | Required |
+| -------- | --- | ----- | --------- | -------- |
+| Environment variable | TFC_AWS_PROVIDER_AUTH | true | false | Yes |
+| Environment variable | TFC_AWS_RUN_ROLE_ARN  | role_arn | false | Yes |
+| Environment variable | TFC_AWS_PLAN_ROLE_ARN | role_arn | false | No |
+| Environment variable | TFC_AWS_APPLY_ROLE_ARN | role_arn | false | No |
 
 ## Source
 
