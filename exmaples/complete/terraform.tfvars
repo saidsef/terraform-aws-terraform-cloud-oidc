@@ -1,0 +1,15 @@
+attach_admin_policy           = false
+attach_read_only_policy       = true
+create_oidc_provider          = true
+enabled                       = true
+force_detach_policies         = false
+organisation                  = "saidsef"
+projects                      = [{ "project" : "foo", "workspaces" : ["*"], "run_phase" : "*" }]
+iam_role_name                 = "terraform-cloud"
+iam_role_path                 = "/"
+iam_role_permissions_boundary = ""
+iam_role_policy_arns          = []
+max_session_duration          = 3600
+region                        = "eu-west-1"
+tags                          = {}
+url                           = "app.terraform.io"
