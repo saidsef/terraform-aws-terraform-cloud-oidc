@@ -14,7 +14,7 @@ No providers.
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_terraform_oidc"></a> [terraform\_oidc](#module\_terraform\_oidc) | ../../ | n/a |
+| <a name="module_terraform_cloud_oidc"></a> [terraform\_cloud\_oidc](#module\_terraform\_cloud\_oidc) | ../../ | n/a |
 
 ## Resources
 
@@ -36,6 +36,7 @@ No resources.
 | <a name="input_max_session_duration"></a> [max\_session\_duration](#input\_max\_session\_duration) | Maximum session duration in seconds | `number` | `3600` | no |
 | <a name="input_organisation"></a> [organisation](#input\_organisation) | Organisation name | `string` | `"saidsef"` | no |
 | <a name="input_projects"></a> [projects](#input\_projects) | List of Workspaces and run\_phase or patterns | <pre>list(object({<br>    project    = string<br>    run_phase  = string<br>    workspaces = list(string)<br>  }))</pre> | <pre>[<br>  {<br>    "project": null,<br>    "run_phase": null,<br>    "workspaces": null<br>  }<br>]</pre> | no |
+| <a name="input_provider_client_id_list"></a> [provider\_client\_id\_list](#input\_provider\_client\_id\_list) | A list of client IDs (also known as audiences) | `list(string)` | <pre>[<br>  "aws.workload.identity"<br>]</pre> | no |
 | <a name="input_region"></a> [region](#input\_region) | AWS Region name | `string` | `"eu-west-1"` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | Map of tags to be applied to all resources | `map(string)` | `{}` | no |
 | <a name="input_url"></a> [url](#input\_url) | URL of identity provider | `string` | `"app.terraform.io"` | no |

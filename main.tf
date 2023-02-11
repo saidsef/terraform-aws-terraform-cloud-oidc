@@ -38,7 +38,7 @@ resource "aws_iam_role_policy_attachment" "custom" {
 
 resource "aws_iam_openid_connect_provider" "provider" {
   count          = tobool(var.enabled) && tobool(var.create_oidc_provider) ? 1 : 0
-  client_id_list = ["aws.workload.identity"]
+  client_id_list = var.provider_client_id_list
 
   tags            = var.tags
   thumbprint_list = [data.tls_certificate.provider.certificates[0].sha1_fingerprint]

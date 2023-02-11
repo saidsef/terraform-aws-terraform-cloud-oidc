@@ -17,6 +17,7 @@ module "terraform_cloud_oidc" {
   iam_role_permissions_boundary = var.iam_role_permissions_boundary
   iam_role_policy_arns          = var.iam_role_policy_arns
   max_session_duration          = var.max_session_duration
+  provider_client_id_list       = var.provider_client_id_list
   tags                          = var.tags
   url                           = var.url
 }
