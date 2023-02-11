@@ -2,7 +2,7 @@ provider "aws" {
   region = var.region
 }
 
-module "terraform_oidc" {
+module "terraform_cloud_oidc" {
   source = "../../"
 
   attach_admin_policy           = var.attach_admin_policy
