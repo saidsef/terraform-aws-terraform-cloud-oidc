@@ -87,6 +87,13 @@ variable "max_session_duration" {
   }
 }
 
+variable "provider_client_id_list" {
+  default     = ["aws.workload.identity"]
+  type        = list(string)
+  description = "A list of client IDs (also known as audiences)"
+  sensitive   = false
+}
+
 variable "url" {
   type        = string
   description = "URL of identity provider"
