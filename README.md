@@ -6,8 +6,10 @@ This Terraform module enables you to configure Terraform Cloud as an AWS IAM OID
 ## Prerequisites
 
 - AWS Account(s) and credentials
+- Terraform Cloud Account(s)
 - GitHub repository
 - Terraform >= 1.x
+- Profit?
 
 ## Deployment / Usage
 
@@ -18,7 +20,7 @@ provider "aws" {
 
 module "terraform_cloud" {
   source  = "saidsef/terraform-cloud-oidc/aws"
-  version = "~> 2"
+  version = ">= 1"
 
   attach_read_only_policy = true
   organisation     = "saidsef"
@@ -41,6 +43,7 @@ After you have create a workspace, navigate to the Variables page and add the fo
 | Environment variable | TFC_AWS_RUN_ROLE_ARN  | role_arn | false | Yes |
 | Environment variable | TFC_AWS_PLAN_ROLE_ARN | role_arn | false | No |
 | Environment variable | TFC_AWS_APPLY_ROLE_ARN | role_arn | false | No |
+| Environment variable | TFC_AWS_WORKLOAD_IDENTITY_AUDIENCE | `aws.workload.identity` | false | No |
 
 ## Source
 
