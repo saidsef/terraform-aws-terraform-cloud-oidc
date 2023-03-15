@@ -75,6 +75,7 @@ jobs:
         with:
           additional_args: "--force-all-dirs --concise-output --code-theme=dark"
           version: "latest"
+          github_token: ${{ github.token }}
 
   caller-identity-check:
     if: contains(github.event_name, 'pull_request')
@@ -86,10 +87,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v1.7.0
+      uses: aws-actions/configure-aws-credentials@v2.0.0
       with:
         aws-region: ${{ secrets.AWS_REGION }}
         role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/github-actions
+        role-session-name: ${{ github.event.repository.name }}-${{ github.ref_type }}
     - run: |
         aws sts get-caller-identity
 
