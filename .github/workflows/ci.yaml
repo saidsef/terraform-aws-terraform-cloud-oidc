@@ -75,6 +75,7 @@ jobs:
         with:
           additional_args: "--force-all-dirs --concise-output --code-theme=dark"
           version: "latest"
+          github_token: ${{ github.token }}
 
   caller-identity-check:
     if: contains(github.event_name, 'pull_request')
@@ -90,6 +91,7 @@ jobs:
       with:
         aws-region: ${{ secrets.AWS_REGION }}
         role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/github-actions
+        role-session-name: ${{ github.event.repository.name }}-${{ github.ref_type }}
     - run: |
         aws sts get-caller-identity
 
