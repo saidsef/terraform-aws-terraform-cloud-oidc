@@ -31,7 +31,6 @@ variable "force_detach_policies" {
 variable "organisation" {
   description = "Terraform Cloud Organisation name"
   type        = string
-  default     = "saidsef"
 }
 
 variable "projects" {
