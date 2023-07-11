@@ -50,14 +50,14 @@ jobs:
       run: |
         terraform version
         terraform providers
-    - name: Exmaple Complete Validate
+    - name: Example Complete Validate
       run: |
-        cd exmaples/complete
+        cd examples/complete
         terraform init -backend=false -upgrade -reconfigure
         terraform validate
-    - name: Exmaple Remote Validate
+    - name: Example Remote Validate
       run: |
-        cd exmaples/remote
+        cd examples/remote
         terraform init -backend=false -upgrade -reconfigure
         terraform validate
 
