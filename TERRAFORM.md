@@ -3,8 +3,8 @@
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | ~> 1 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 4 |
-| <a name="requirement_tls"></a> [tls](#requirement\_tls) | >= 4 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 4, < 6 |
+| <a name="requirement_tls"></a> [tls](#requirement\_tls) | >= 4, < 5 |
 
 ## Providers
 
@@ -45,7 +45,7 @@ No modules.
 | <a name="input_iam_role_permissions_boundary"></a> [iam\_role\_permissions\_boundary](#input\_iam\_role\_permissions\_boundary) | ARN of the permissions boundary to be used by the IAM role | `string` | `""` | no |
 | <a name="input_iam_role_policy_arns"></a> [iam\_role\_policy\_arns](#input\_iam\_role\_policy\_arns) | List of IAM policy ARNs to attach to the IAM role | `list(string)` | `[]` | no |
 | <a name="input_max_session_duration"></a> [max\_session\_duration](#input\_max\_session\_duration) | Maximum session duration in seconds | `number` | `3600` | no |
-| <a name="input_organisation"></a> [organisation](#input\_organisation) | Terraform Cloud Organisation name | `string` | `"saidsef"` | no |
+| <a name="input_organisation"></a> [organisation](#input\_organisation) | Terraform Cloud Organisation name | `string` | n/a | yes |
 | <a name="input_projects"></a> [projects](#input\_projects) | List of Workspaces and run\_phase or patterns | <pre>list(object({<br>    project    = string<br>    run_phase  = string<br>    workspaces = list(string)<br>  }))</pre> | <pre>[<br>  {<br>    "project": null,<br>    "run_phase": null,<br>    "workspaces": null<br>  }<br>]</pre> | no |
 | <a name="input_provider_client_id_list"></a> [provider\_client\_id\_list](#input\_provider\_client\_id\_list) | A list of client IDs (also known as audiences) | `list(string)` | <pre>[<br>  "aws.workload.identity"<br>]</pre> | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | Map of tags to be applied to all resources | `map(string)` | `{}` | no |
@@ -55,6 +55,6 @@ No modules.
 
 | Name | Description |
 |------|-------------|
-| <a name="output_projects"></a> [projects](#output\_projects) | List of projects |
-| <a name="output_role_arn"></a> [role\_arn](#output\_role\_arn) | AWS role ARN |
-| <a name="output_role_id"></a> [role\_id](#output\_role\_id) | AWS role ID |
+| <a name="output_projects"></a> [projects](#output\_projects) | List of Terraform Cloud projects |
+| <a name="output_role_arn"></a> [role\_arn](#output\_role\_arn) | AWS Role ARN |
+| <a name="output_role_id"></a> [role\_id](#output\_role\_id) | AWS Role ID |

@@ -1,4 +1,5 @@
 locals {
+  oidc_provider = tobool(var.create_oidc_provider) ? aws_iam_openid_connect_provider.provider[0] : data.aws_iam_openid_connect_provider.provider[0]
   projects = flatten([
     for repo in var.projects : [
       for workspace in repo.workspaces : {
@@ -19,7 +20,7 @@ data "aws_iam_policy_document" "assume_role" {
 
     condition {
       test     = "StringEquals"
-      values   = [format("%s", one(aws_iam_openid_connect_provider.provider[0].client_id_list))]
+      values   = [format("%s", one(local.oidc_provider.client_id_list))]
       variable = format("%s:aud", var.url)
     }
 

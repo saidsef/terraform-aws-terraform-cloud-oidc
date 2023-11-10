@@ -1,7 +1,3 @@
-locals {
-  oidc_provider = tobool(var.create_oidc_provider) ? aws_iam_openid_connect_provider.provider[0] : data.aws_iam_openid_connect_provider.provider[0]
-}
-
 resource "aws_iam_role" "role" {
   count = tobool(var.enabled) ? 1 : 0
 
