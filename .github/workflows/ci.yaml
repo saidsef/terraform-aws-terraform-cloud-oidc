@@ -101,7 +101,7 @@ jobs:
     needs: [validate, tfsec, caller-identity-check]
     steps:
     - name: Auto Approve PR
-      uses: actions/github-script@v6
+      uses: actions/github-script@v7
       with:
        github-token: ${{ github.token }}
        script: |
