@@ -78,6 +78,7 @@ jobs:
           github_token: ${{ github.token }}
 
   attest:
+    if:  contains(github.ref, 'main')
     name: attest
     runs-on: ubuntu-latest
     needs: [tfsec]
@@ -113,7 +114,7 @@ jobs:
   auto-approve:
     if: contains(github.event_name, 'pull_request')
     runs-on: ubuntu-latest
-    needs: [validate, tfsec, attest, caller-identity-check]
+    needs: [validate, tfsec, caller-identity-check]
     steps:
     - name: Auto Approve PR
       uses: actions/github-script@v7
