@@ -44,4 +44,4 @@ jobs:
 
   auto-approve:
     uses: saidsef/saidsef/.github/workflows/auto-approve.yaml@main
-    needs: [validate, tfsec, attest, caller-identity-check]
+    needs: [validate, tfsec, caller-identity-check]
