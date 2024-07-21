@@ -10,88 +10,19 @@ on:
   workflow_dispatch:
 
 jobs:
-  pre-commit:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-python@v5
-    - uses: terraform-linters/setup-tflint@v4
-    - uses: pre-commit/action@v3.0.1
-      with:
-        extra_args: "-a"
-
   validate:
-    name: Validate
-    needs: [pre-commit]
-    runs-on: ubuntu-latest
-    permissions:
-      pull-requests: write
-    strategy:
-      fail-fast: true
-      matrix:
-        tf-version: ["1.0", "1.1", "1.2", "1.3", "1.4", "1.5", "1.6", "1.7", "latest"]
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-    - name: Setup Terraform
-      uses: hashicorp/setup-terraform@v3
-      with:
-        terraform_version: ${{ matrix.tf-version }}
-    - name: Terraform Init
-      run: |
-        terraform init -backend=false -upgrade -reconfigure
-    - name: Terraform FMT
-      run: |
-        terraform fmt -check -recursive
-    - name: Terraform Validate
-      run: |
-        terraform validate
-    - name: Terraform Version / Providers
-      run: |
-        terraform version
-        terraform providers
-    - name: Example Complete Validate
-      run: |
-        cd examples/complete
-        terraform init -backend=false -upgrade -reconfigure
-        terraform validate
-    - name: Example Remote Validate
-      run: |
-        cd examples/remote
-        terraform init -backend=false -upgrade -reconfigure
-        terraform validate
+    uses: saidsef/saidsef/.github/workflows/tf-validate.yaml@main
+    with:
+      start-version: '0'
+      end-version: '8'
 
   tfsec:
-    name: tfsec
-    runs-on: ubuntu-latest
-    permissions:
-      pull-requests: write
+    uses: saidsef/saidsef/.github/workflows/tf-security.yaml@main
     needs: [validate]
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      - name: tfsec
-        uses: aquasecurity/tfsec-action@v1.0.3
-        with:
-          additional_args: "--force-all-dirs --concise-output --code-theme=dark"
-          version: "latest"
-          github_token: ${{ github.token }}
 
   attest:
-    if:  contains(github.ref, 'main')
-    name: attest
-    runs-on: ubuntu-latest
+    uses: saidsef/saidsef/.github/workflows/tf-attest.yaml@main
     needs: [tfsec]
-    permissions:
-      attestations: write
-      contents: read
-      id-token: write
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      - uses: actions/attest-build-provenance@v1
-        with:
-          subject-path: '*.tf'
 
   caller-identity-check:
     if: contains(github.event_name, 'pull_request')
@@ -112,18 +43,5 @@ jobs:
         aws sts get-caller-identity
 
   auto-approve:
-    if: contains(github.event_name, 'pull_request')
-    runs-on: ubuntu-latest
-    needs: [validate, tfsec, caller-identity-check]
-    steps:
-    - name: Auto Approve PR
-      uses: actions/github-script@v7
-      with:
-       github-token: ${{ github.token }}
-       script: |
-        github.rest.pulls.createReview({
-          owner: context.repo.owner,
-          repo: context.repo.repo,
-          pull_number: context.issue.number,
-          event: "APPROVE"
-        })
+    uses: saidsef/saidsef/.github/workflows/auto-approve.yaml@main
+    needs: [validate, tfsec, attest, caller-identity-check]
