@@ -1,12 +1,12 @@
 output "role_id" {
   description = "AWS Role ID"
-  value       = aws_iam_role.role[0].id
+  value       = var.enabled ? aws_iam_role.role[0].id : ""
   sensitive   = false
 }
 
 output "role_arn" {
   description = "AWS Role ARN"
-  value       = aws_iam_role.role[0].arn
+  value       = var.enabled ? aws_iam_role.role[0].arn : ""
   sensitive   = false
 }
 
