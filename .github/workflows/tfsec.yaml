@@ -18,7 +18,7 @@ jobs:
       security-events: write
     steps:
     - name: Clone repo
-      uses: actions/checkout@v6
+      uses: actions/checkout@v7
     - name: Run tfsec
       uses: aquasecurity/tfsec-sarif-action@master
       with:
@@ -33,7 +33,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Clone repo
-      uses: actions/checkout@v6
+      uses: actions/checkout@v7
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v4
       with:
